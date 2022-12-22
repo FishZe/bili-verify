@@ -1,0 +1,6 @@
+port: 8080
+room_id: 000000
+base_url: https://verify.example.com
+need_auth: true
+client_id: xxxxxxxxxx
+client_secret: xxxxxxxxxxxxxxxxxxx
