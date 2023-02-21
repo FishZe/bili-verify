@@ -1,10 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"github.com/FishZe/go_bilichat_core"
-	"github.com/FishZe/go_bilichat_core/Handler"
+	bili "github.com/FishZe/Go-BiliChat"
+	"github.com/FishZe/Go-BiliChat/handler"
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
 	"github.com/patrickmn/go-cache"
@@ -69,7 +68,7 @@ var limiter *rate.Limiter
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
-	err := errors.New("")
+	var err error
 	conf, err = getConf()
 	if err != nil {
 		makeConfig()
@@ -82,9 +81,12 @@ func main() {
 			log.Printf("init db failed: %v", err)
 		}
 	}
-	h := go_bilichat_core.GetNewHandler()
-	h.New(go_bilichat_core.CmdDanmuMsg, conf.RoomId, HandleDanmuMsg)
-	h.Binding(go_bilichat_core.LiveRoom{RoomId: conf.RoomId})
+	h := bili.GetNewHandler()
+	h.AddOption(handler.CmdDanmuMsg, conf.RoomId, HandleDanmuMsg)
+	// 连接到直播间
+	h.AddRoom(conf.RoomId)
+	// 启动处理器
+	h.Run()
 	h.Run()
 	limiter = rate.NewLimiter(1000, 1000)
 	router := gin.Default()
@@ -291,7 +293,7 @@ func QueryVerify(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func HandleDanmuMsg(event Handler.MsgEvent) {
+func HandleDanmuMsg(event handler.MsgEvent) {
 	msg, found := verify.Get(event.DanMuMsg.Data.Content)
 	if found {
 		switch msg.(type) {
@@ -299,10 +301,7 @@ func HandleDanmuMsg(event Handler.MsgEvent) {
 			if msg == false {
 				UserInfo := User{Uid: event.DanMuMsg.Data.Sender.Uid, Name: event.DanMuMsg.Data.Sender.Name, Medal: event.DanMuMsg.Data.Medal.MedalName}
 				verify.Set(event.DanMuMsg.Data.Content, UserInfo, cache.DefaultExpiration)
-				err := setBiliUid(event.DanMuMsg.Data.Content, UserInfo.Uid)
-				if err != nil {
-					log.Printf("set bili uid failed: %v", err)
-				}
+				_ = setBiliUid(event.DanMuMsg.Data.Content, UserInfo.Uid)
 			}
 		}
 	}

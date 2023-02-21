@@ -3,16 +3,17 @@ module bili_verify
 go 1.19
 
 require (
-	github.com/FishZe/go_bilichat_core v0.0.0-alpha.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/gofrs/uuid v4.3.1+incompatible
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/FishZe/Go-BiliChat v0.0.0-20230208161224-49a3472d541d
 	golang.org/x/time v0.3.0
 	gopkg.in/yaml.v2 v2.4.0
 	modernc.org/sqlite v1.20.0
 )
 
 require (
+	github.com/FishZe/Go-BiliChat v0.0.0-20230208161224-49a3472d541d // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -30,6 +31,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
+	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/mod v0.3.0 // indirect
